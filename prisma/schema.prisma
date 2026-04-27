@@ -1,0 +1,146 @@
+// Prisma schema for Rare Disease Platform
+
+generator client {
+  provider = "prisma-client"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// --- Enums ---
+
+enum Role {
+  PATIENT
+  PHYSICIAN
+  ADMIN
+}
+
+enum SurveyStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum QuestionType {
+  TEXT
+  NUMBER
+  SINGLE_CHOICE
+  MULTI_CHOICE
+  SCALE
+}
+
+// --- Models ---
+
+model User {
+  id               String            @id @default(uuid())
+  email            String            @unique
+  passwordHash     String
+  fullName         String
+  role             Role
+  emailVerified    Boolean           @default(false)
+  active           Boolean           @default(true)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  patientProfile   PatientProfile?
+  physicianProfile PhysicianProfile?
+  surveyResponses  SurveyResponse[]
+  auditLogs        AuditLog[]
+  contentPages     ContentPage[]
+}
+
+model PatientProfile {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id])
+  dateOfBirth   DateTime?
+  diagnosisYear String?
+  createdAt     DateTime @default(now())
+}
+
+model PhysicianProfile {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  credentials     String
+  specialty       String
+  practiceName    String
+  practiceAddress String
+  city            String
+  state           String
+  zipCode         String
+  phone           String
+  website         String?
+  active          Boolean  @default(true)
+  approved        Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Survey {
+  id          String           @id @default(uuid())
+  title       String
+  description String
+  version     Int              @default(1)
+  status      SurveyStatus     @default(DRAFT)
+  createdAt   DateTime         @default(now())
+  publishedAt DateTime?
+  questions   SurveyQuestion[]
+  responses   SurveyResponse[]
+}
+
+model SurveyQuestion {
+  id           String         @id @default(uuid())
+  surveyId     String
+  survey       Survey         @relation(fields: [surveyId], references: [id])
+  orderIndex   Int
+  questionText String
+  questionType QuestionType
+  options      Json?
+  required     Boolean        @default(true)
+  answers      ResponseAnswer[]
+}
+
+model SurveyResponse {
+  id            String           @id @default(uuid())
+  surveyId      String
+  survey        Survey           @relation(fields: [surveyId], references: [id])
+  patientId     String
+  patient       User             @relation(fields: [patientId], references: [id])
+  surveyVersion Int
+  submittedAt   DateTime         @default(now())
+  answers       ResponseAnswer[]
+}
+
+model ResponseAnswer {
+  id         String         @id @default(uuid())
+  responseId String
+  response   SurveyResponse @relation(fields: [responseId], references: [id])
+  questionId String
+  question   SurveyQuestion @relation(fields: [questionId], references: [id])
+  answer     Json
+}
+
+model ContentPage {
+  id        String   @id @default(uuid())
+  slug      String   @unique
+  title     String
+  body      String
+  published Boolean  @default(false)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  action     String
+  entityType String
+  entityId   String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+}
