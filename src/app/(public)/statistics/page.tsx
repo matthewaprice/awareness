@@ -20,7 +20,7 @@ export default async function StatisticsPage() {
   const stats = await getPublicStatistics();
 
   return (
-    <main className="container mx-auto max-w-5xl px-4 py-8">
+    <main className="container mx-auto max-w-3xl px-4 py-8">
       <h1 className="text-3xl font-bold mb-2">Symptom Statistics</h1>
       <p className="text-muted-foreground mb-8">
         Aggregated, de-identified data from patient surveys. No personal

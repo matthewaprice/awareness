@@ -26,7 +26,7 @@ export default async function SurveyPage({
   const draft = await getSurveyDraft(session.user.id, id);
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-8">
+    <div className="mx-auto w-lg sm:w-xl px-4 py-8">
       <SurveyForm
         survey={survey}
         patientId={session.user.id}

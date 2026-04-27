@@ -16,6 +16,7 @@ import { LogoutButton } from "@/components/auth/logout-button";
 const publicLinks = [
   { href: "/about", label: "About" },
   { href: "/research", label: "Research" },
+  { href: "/faq", label: "FAQs" },
   { href: "/find-a-doctor", label: "Find a Doctor" },
   { href: "/statistics", label: "Statistics" },
 ];
@@ -49,17 +50,27 @@ export function NavBar() {
         aria-label="Main navigation"
         className="container mx-auto flex h-14 items-center justify-between px-4"
       >
-        {/* Logo / Home */}
+        {/* Logo / Home — fixed width to balance with auth section */}
+        <div className="hidden md:flex flex-1">
+          <Link
+            href="/"
+            className="text-lg font-semibold tracking-tight"
+            aria-label="Home"
+          >
+            IIH Info
+          </Link>
+        </div>
+        {/* Mobile logo — no flex-1 needed */}
         <Link
           href="/"
-          className="text-lg font-semibold tracking-tight"
+          className="text-lg font-semibold tracking-tight md:hidden"
           aria-label="Home"
         >
-          Rare Disease Platform
+          IIH Info
         </Link>
 
-        {/* Desktop links */}
-        <ul className="hidden md:flex items-center gap-1" role="list">
+        {/* Desktop links — centered */}
+        <ul className="hidden md:flex items-center gap-1 shrink-0" role="list">
           {links.map((link) => (
             <li key={link.href}>
               <Link
@@ -72,8 +83,8 @@ export function NavBar() {
           ))}
         </ul>
 
-        {/* Desktop auth */}
-        <div className="hidden md:flex items-center gap-2">
+        {/* Desktop auth — fixed width to balance with logo section */}
+        <div className="hidden md:flex flex-1 items-center justify-end gap-2">
           {authenticated ? (
             <>
               <span className="text-sm text-muted-foreground">

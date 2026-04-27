@@ -32,7 +32,7 @@ export default function RootLayout({
             {children}
           </div>
           <footer className="border-t py-6 text-center text-sm text-muted-foreground">
-            <p>&copy; {new Date().getFullYear()} Rare Disease Platform. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} IIH Info. All rights reserved.</p>
           </footer>
         </Providers>
       </body>

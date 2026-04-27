@@ -225,7 +225,7 @@ export function SurveyForm({ survey, patientId, initialDraft }: SurveyFormProps)
   // Confirmation screen after successful submission
   if (submitted) {
     return (
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Thank You!</CardTitle>
           <CardDescription>
@@ -252,7 +252,7 @@ export function SurveyForm({ survey, patientId, initialDraft }: SurveyFormProps)
       <CardHeader>
         <div className="flex items-start justify-between gap-4">
           <div>
-            <CardTitle>{survey.title}</CardTitle>
+            <CardTitle className="mb-3">{survey.title}</CardTitle>
             <CardDescription>{survey.description}</CardDescription>
           </div>
           <Badge variant="outline">
@@ -311,13 +311,14 @@ export function SurveyForm({ survey, patientId, initialDraft }: SurveyFormProps)
           </form>
         </Form>
       </CardContent>
-      {lastSaved && (
-        <CardFooter>
-          <p className="text-xs text-muted-foreground">
-            Draft saved {lastSaved.toLocaleTimeString()}
-          </p>
-        </CardFooter>
-      )}
+      <CardFooter className="flex-col items-start gap-2">
+        {lastSaved && (
+            <p className="text-xs text-muted-foreground">
+              Draft saved {lastSaved.toLocaleTimeString()}
+            </p>
+        )}
+        <p className="text-xs italic text-muted-foreground">Answers are not saved to your account. They are only used for statistical purposes.</p>
+      </CardFooter>
     </Card>
   );
 }

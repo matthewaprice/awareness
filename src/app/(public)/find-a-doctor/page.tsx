@@ -38,7 +38,7 @@ export default async function FindADoctorPage({
     : null;
 
   return (
-    <main className="container mx-auto max-w-4xl px-4 py-8">
+    <main className="container mx-auto max-w-3xl px-4 py-8">
       <h1 className="text-3xl font-bold mb-2">Find a Doctor</h1>
       <p className="text-muted-foreground mb-6">
         Search for physicians who specialize in treating this condition.
@@ -46,7 +46,7 @@ export default async function FindADoctorPage({
 
       {/* Search form */}
       <Card className="mb-8">
-        <CardContent className="pt-6">
+        <CardContent>
           <form action="/find-a-doctor" method="GET" className="grid gap-4">
             <div className="grid gap-4 sm:grid-cols-3">
               <div>
