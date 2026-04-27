@@ -2,9 +2,7 @@ import { notFound } from "next/navigation";
 import { getPublishedContent } from "@/actions/content";
 import {
   Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
+  CardContent
 } from "@/components/ui/card";
 
 /**

@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Link from "next/link";
 
 /**
  * Public physician search page — "Find a Doctor".
@@ -96,7 +97,7 @@ export default async function FindADoctorPage({
               <Button type="submit">Search</Button>
               {hasSearchQuery && (
                 <Button variant="outline" asChild>
-                  <a href="/find-a-doctor">Clear</a>
+                  <Link href="/find-a-doctor">Clear</Link>
                 </Button>
               )}
             </div>
