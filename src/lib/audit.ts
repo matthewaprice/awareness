@@ -43,7 +43,7 @@ export async function logAuditEvent(params: {
         action: params.action,
         entityType: params.entityType,
         entityId: params.entityId ?? null,
-        metadata: params.metadata ?? null,
+        metadata: (params.metadata as never) ?? undefined,
       },
     });
   } catch (error) {

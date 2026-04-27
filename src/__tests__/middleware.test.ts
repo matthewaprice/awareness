@@ -4,7 +4,7 @@ import { matchesRoute } from "../proxy";
 // ---------------------------------------------------------------------------
 // Mock next-auth/jwt before importing middleware
 // ---------------------------------------------------------------------------
-const mockGetToken = jest.fn();
+const mockGetToken = jest.fn<(...args: unknown[]) => Promise<Record<string, unknown> | null>>();
 jest.mock("next-auth/jwt", () => ({
   getToken: (...args: unknown[]) => mockGetToken(...args),
 }));
@@ -12,8 +12,8 @@ jest.mock("next-auth/jwt", () => ({
 // ---------------------------------------------------------------------------
 // Mock cache session functions
 // ---------------------------------------------------------------------------
-const mockGetSession = jest.fn();
-const mockExtendSession = jest.fn();
+const mockGetSession = jest.fn<(...args: unknown[]) => Promise<Record<string, unknown> | null>>();
+const mockExtendSession = jest.fn<(...args: unknown[]) => Promise<void>>();
 jest.mock("@/lib/cache", () => ({
   getSession: (...args: unknown[]) => mockGetSession(...args),
   extendSession: (...args: unknown[]) => mockExtendSession(...args),

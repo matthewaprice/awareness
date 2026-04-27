@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useForm, useFieldArray, type Control } from "react-hook-form";
+import { useForm, useFieldArray, useWatch, type Control } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { surveyInputSchema } from "@/lib/validation";
 import {
@@ -126,9 +126,21 @@ export default function AdminSurveysPage() {
       return;
     }
     if (status === "authenticated") {
-      fetchSurveys();
+      let cancelled = false;
+      (async () => {
+        setLoading(true);
+        try {
+          const data = await listAllSurveys();
+          if (!cancelled) setSurveys(data as unknown as SurveyRow[]);
+        } catch {
+          // silently fail
+        } finally {
+          if (!cancelled) setLoading(false);
+        }
+      })();
+      return () => { cancelled = true; };
     }
-  }, [status, typedSession, fetchSurveys, router]);
+  }, [status, typedSession, router]);
 
   function openCreateDialog() {
     setEditingSurveyId(null);
@@ -383,7 +395,6 @@ export default function AdminSurveysPage() {
                       </div>
                       {/* Options input for choice/scale types */}
                       <OptionsInput
-                        questionType={form.watch(`questions.${index}.questionType`)}
                         index={index}
                         control={form.control}
                         disabled={saving}
@@ -452,16 +463,16 @@ const TYPES_WITH_OPTIONS = ["SINGLE_CHOICE", "MULTI_CHOICE", "SCALE"];
  * Users enter comma-separated values which get parsed into an array on submit.
  */
 function OptionsInput({
-  questionType,
   index,
   control,
   disabled,
 }: {
-  questionType: string;
   index: number;
   control: Control<SurveyInput>;
   disabled: boolean;
 }) {
+  const questionType = useWatch({ control, name: `questions.${index}.questionType` });
+
   if (!TYPES_WITH_OPTIONS.includes(questionType)) return null;
 
   const placeholder =

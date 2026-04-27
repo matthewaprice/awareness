@@ -115,7 +115,7 @@ function shouldHaveAccess(
   if (isPhysician) return role === "PHYSICIAN" || role === "ADMIN";
 
   // Routes not in any config: authenticated users can access
-  return role !== "UNAUTHENTICATED";
+  return true;
 }
 
 // ---------------------------------------------------------------------------
